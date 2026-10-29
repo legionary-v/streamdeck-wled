@@ -5,8 +5,10 @@ import type { IconName } from "../render/icons";
 import { EMPTY_IMAGE, type KeyOptions, renderStrip } from "../render/svg";
 import type { WledClient } from "../wled/client";
 import type { DeviceSettings } from "../wled/manager";
-import type { NamedItem } from "../wled/types";
+import type { NamedItem, SegmentPatch } from "../wled/types";
 import { type DataSourceItem, type Instance, namedItems, randomItem, segmentId, segmentOf, segmentPatch, step, WledAction } from "./wled-action";
+
+const SOLID_EFFECT = 0;
 
 export type ListSettings = DeviceSettings & {
 	/** Key behavior. */
@@ -27,6 +29,8 @@ export type ListConfig = {
 	dataSource: string;
 	/** Item applied when the dial is pressed. */
 	resetId: number;
+	/** Effect switched to when an item is applied while Solid is running, since Solid would hide it (e.g. a palette). */
+	solidFallbackEffect?: number;
 	items(client: WledClient): { get(): Promise<NamedItem[]>; peek(): NamedItem[] | undefined };
 };
 
@@ -104,7 +108,10 @@ export abstract class ListAction extends WledAction<ListSettings> {
 				iconColor: this.config.iconColor,
 				label: Number.isNaN(id) ? `Choose ${noun.toLowerCase()}` : this.#name(client, id),
 				gradient: this.config.field === "pal" ? this.gradient(instance, id) : undefined,
-				active: client?.state?.on === true && current === id,
+				active:
+					client?.state?.on === true &&
+					current === id &&
+					(this.config.solidFallbackEffect === undefined || segmentOf(instance)?.fx !== SOLID_EFFECT),
 			};
 		}
 
@@ -149,7 +156,12 @@ export abstract class ListAction extends WledAction<ListSettings> {
 	}
 
 	#apply(client: WledClient, settings: ListSettings, id: number): void {
-		client.send(segmentPatch(settings, { [this.config.field]: id }));
+		const fields: SegmentPatch = { [this.config.field]: id };
+		const fallback = this.config.solidFallbackEffect;
+		if (fallback !== undefined && client.segment(segmentId(settings))?.fx === SOLID_EFFECT) {
+			fields.fx = fallback;
+		}
+		client.send(segmentPatch(settings, fields));
 	}
 
 	async #move(client: WledClient, settings: ListSettings, by: number | "next" | "previous" | "random"): Promise<void> {
