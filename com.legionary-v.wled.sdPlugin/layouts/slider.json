@@ -1,0 +1,10 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/layout.json",
+	"id": "wled-slider",
+	"items": [
+		{ "key": "icon", "type": "pixmap", "rect": [16, 14, 40, 40] },
+		{ "key": "title", "type": "text", "rect": [66, 10, 118, 20], "alignment": "left", "font": { "size": 15, "weight": 600 }, "text-overflow": "ellipsis" },
+		{ "key": "value", "type": "text", "rect": [66, 32, 118, 28], "alignment": "left", "font": { "size": 22, "weight": 700 }, "text-overflow": "ellipsis" },
+		{ "key": "indicator", "type": "bar", "rect": [16, 72, 168, 14], "subtype": 0, "border_w": 0, "bar_bg_c": "#3a3a40", "bar_fill_c": "#ffffff", "value": 0 }
+	]
+}

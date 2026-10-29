@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Effect Speed / Intensity</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device segments></wled-device>
+		<sdpi-item label="Parameter">
+			<sdpi-select setting="param" default="sx">
+				<option value="sx">Speed</option>
+				<option value="ix">Intensity</option>
+				<option value="c1">Custom 1</option>
+				<option value="c2">Custom 2</option>
+				<option value="c3">Custom 3</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Key action">
+			<sdpi-select setting="mode" default="set">
+				<option value="set">Set value</option>
+				<option value="up">Increase</option>
+				<option value="down">Decrease</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Value">
+			<sdpi-range setting="value" min="0" max="100" step="1" default="50" showlabels>
+				<span slot="min">0%</span>
+				<span slot="max">100%</span>
+			</sdpi-range>
+		</sdpi-item>
+		<sdpi-item label="Step">
+			<sdpi-range setting="step" min="1" max="25" step="1" default="10" showlabels>
+				<span slot="min">1%</span>
+				<span slot="max">25%</span>
+			</sdpi-range>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">On a dial, the step applies per tick (default 4%). Press the dial to reset to 50%.</p>
+		</sdpi-item>
+	</body>
+</html>

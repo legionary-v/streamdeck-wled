@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Power</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device></wled-device>
+		<sdpi-item label="Action">
+			<sdpi-select setting="mode" default="toggle">
+				<option value="toggle">Toggle</option>
+				<option value="on">Turn on</option>
+				<option value="off">Turn off</option>
+			</sdpi-select>
+		</sdpi-item>
+	</body>
+</html>

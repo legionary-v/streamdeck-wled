@@ -1,0 +1,41 @@
+{
+  "name": "streamdeck-wled",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stream Deck plugin for controlling WLED devices locally over WebSocket",
+  "author": "Michael Egan",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/legionary-v/streamdeck-wled.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.legionary-v.wled\"",
+    "typecheck": "tsc --noEmit",
+    "icons": "node --experimental-strip-types scripts/generate-icons.mjs",
+    "profiles": "node scripts/build-profiles.mjs",
+    "validate": "streamdeck validate com.legionary-v.wled.sdPlugin",
+    "pack": "npm run build && streamdeck pack com.legionary-v.wled.sdPlugin --output dist --force"
+  },
+  "dependencies": {
+    "@elgato/streamdeck": "^3.0.4",
+    "@elgato/utils": "^0.6.2",
+    "bonjour-service": "^1.4.4"
+  },
+  "devDependencies": {
+    "@elgato/cli": "^1.10.4",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.2",
+    "@rollup/plugin-typescript": "^12.3.1",
+    "@tsconfig/node24": "^24.0.5",
+    "@types/node": "~24.1.0",
+    "fflate": "^0.8.3",
+    "rollup": "^4.66.0",
+    "sharp": "^0.35.5",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3"
+  }
+}

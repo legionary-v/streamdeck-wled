@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Custom JSON</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device></wled-device>
+		<sdpi-item label="JSON">
+			<sdpi-textarea setting="json" rows="8" placeholder='{"on":true,"bri":128,"seg":[{"fx":9}]}'></sdpi-textarea>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">Sent as-is over the WebSocket. See kno.wled.ge/interfaces/json-api for available fields.</p>
+		</sdpi-item>
+	</body>
+</html>

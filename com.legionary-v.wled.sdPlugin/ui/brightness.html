@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Brightness</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device segments></wled-device>
+		<sdpi-item label="Key action">
+			<sdpi-select setting="mode" default="set">
+				<option value="set">Set brightness</option>
+				<option value="up">Brighter</option>
+				<option value="down">Dimmer</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Brightness">
+			<sdpi-range setting="value" min="1" max="100" step="1" default="50" showlabels>
+				<span slot="min">1%</span>
+				<span slot="max">100%</span>
+			</sdpi-range>
+		</sdpi-item>
+		<sdpi-item label="Step">
+			<sdpi-range setting="step" min="1" max="25" step="1" default="10" showlabels>
+				<span slot="min">1%</span>
+				<span slot="max">25%</span>
+			</sdpi-range>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">On a dial, the step applies per tick (default 5%). Press the dial to toggle power. With a segment selected, the segment brightness is changed instead of the master brightness.</p>
+		</sdpi-item>
+	</body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Preset</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device></wled-device>
+		<sdpi-item label="Key action">
+			<sdpi-select setting="mode" default="apply">
+				<option value="apply">Apply preset</option>
+				<option value="next">Next preset</option>
+				<option value="previous">Previous preset</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Preset">
+			<sdpi-select setting="preset" datasource="getPresets" hot-reload loading="Loading presets…" placeholder="Choose a preset"></sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">Presets and playlists are created in the WLED web UI. On a dial: rotate to choose, press or tap to apply.</p>
+		</sdpi-item>
+	</body>
+</html>

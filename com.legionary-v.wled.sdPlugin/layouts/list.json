@@ -1,0 +1,10 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/layout.json",
+	"id": "wled-list",
+	"items": [
+		{ "key": "title", "type": "text", "rect": [16, 6, 168, 20], "alignment": "left", "font": { "size": 14, "weight": 600 }, "text-overflow": "ellipsis" },
+		{ "key": "value", "type": "text", "rect": [16, 27, 168, 30], "alignment": "left", "font": { "size": 21, "weight": 700 }, "text-overflow": "ellipsis" },
+		{ "key": "strip", "type": "pixmap", "rect": [16, 62, 168, 14] },
+		{ "key": "sub", "type": "text", "rect": [16, 79, 168, 17], "alignment": "left", "color": "#9a9aa3", "font": { "size": 12, "weight": 400 } }
+	]
+}

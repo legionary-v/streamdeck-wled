@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Effect</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device segments></wled-device>
+		<sdpi-item label="Key action">
+			<sdpi-select setting="mode" default="set">
+				<option value="set">Set effect</option>
+				<option value="next">Next effect</option>
+				<option value="previous">Previous effect</option>
+				<option value="random">Random effect</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Effect">
+			<sdpi-select setting="effect" datasource="getEffects" hot-reload loading="Loading effects…" placeholder="Choose an effect"></sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">On a dial: rotate to scroll through effects, press for Solid, tap the touch strip for a random effect.</p>
+		</sdpi-item>
+	</body>
+</html>

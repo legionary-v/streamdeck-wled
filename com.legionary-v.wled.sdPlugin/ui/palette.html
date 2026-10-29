@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Palette</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device segments></wled-device>
+		<sdpi-item label="Key action">
+			<sdpi-select setting="mode" default="set">
+				<option value="set">Set palette</option>
+				<option value="next">Next palette</option>
+				<option value="previous">Previous palette</option>
+				<option value="random">Random palette</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Palette">
+			<sdpi-select setting="palette" datasource="getPalettes" hot-reload loading="Loading palettes…" placeholder="Choose a palette"></sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">On a dial: rotate to scroll through palettes, press for Default, tap the touch strip for a random palette.</p>
+		</sdpi-item>
+	</body>
+</html>

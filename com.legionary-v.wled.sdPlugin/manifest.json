@@ -1,0 +1,165 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+	"Name": "WLED",
+	"Version": "0.1.0.0",
+	"Author": "Michael Egan",
+	"Description": "Control WLED devices on your local network: power, brightness, colors, effects, palettes, effect speed and intensity, and presets — over a local WebSocket, no cloud required.",
+	"URL": "https://github.com/legionary-v/streamdeck-wled",
+	"Category": "WLED",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"Icon": "imgs/plugin/marketplace",
+	"CodePath": "bin/plugin.js",
+	"SDKVersion": 3,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"UUID": "com.legionary-v.wled",
+	"Profiles": [
+		{
+			"Name": "profiles/WLED",
+			"DeviceType": 0,
+			"DontAutoSwitchWhenInstalled": true
+		},
+		{
+			"Name": "profiles/WLED Plus",
+			"DeviceType": 7,
+			"DontAutoSwitchWhenInstalled": true
+		}
+	],
+	"Actions": [
+		{
+			"Name": "Power",
+			"UUID": "com.legionary-v.wled.power",
+			"Icon": "imgs/actions/power/icon",
+			"Tooltip": "Turn the light on, off, or toggle it.",
+			"PropertyInspectorPath": "ui/power.html",
+			"Controllers": ["Keypad"],
+			"States": [{ "Image": "imgs/actions/power/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Brightness",
+			"UUID": "com.legionary-v.wled.brightness",
+			"Icon": "imgs/actions/brightness/icon",
+			"Tooltip": "Set or step the brightness. On a dial: rotate to adjust, press to toggle power.",
+			"PropertyInspectorPath": "ui/brightness.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/slider.json",
+				"TriggerDescription": {
+					"Rotate": "Adjust brightness",
+					"Push": "Toggle power",
+					"Touch": "Toggle power"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/brightness/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Color",
+			"UUID": "com.legionary-v.wled.color",
+			"Icon": "imgs/actions/color/icon",
+			"Tooltip": "Set a color. On a dial: rotate to change hue or saturation, press to switch, tap for white.",
+			"PropertyInspectorPath": "ui/color.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/gradient.json",
+				"TriggerDescription": {
+					"Rotate": "Change hue / saturation",
+					"Push": "Switch hue / saturation",
+					"Touch": "White"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/color/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Effect",
+			"UUID": "com.legionary-v.wled.effect",
+			"Icon": "imgs/actions/effect/icon",
+			"Tooltip": "Set an effect, or cycle through effects. On a dial: rotate to scroll effects.",
+			"PropertyInspectorPath": "ui/effect.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/list.json",
+				"TriggerDescription": {
+					"Rotate": "Change effect",
+					"Push": "Solid",
+					"Touch": "Random effect"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/effect/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Palette",
+			"UUID": "com.legionary-v.wled.palette",
+			"Icon": "imgs/actions/palette/icon",
+			"Tooltip": "Set a color palette, or cycle through palettes. On a dial: rotate to scroll palettes.",
+			"PropertyInspectorPath": "ui/palette.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/list.json",
+				"TriggerDescription": {
+					"Rotate": "Change palette",
+					"Push": "Default palette",
+					"Touch": "Random palette"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/palette/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Effect Speed / Intensity",
+			"UUID": "com.legionary-v.wled.effect-parameter",
+			"Icon": "imgs/actions/effect-parameter/icon",
+			"Tooltip": "Adjust the effect speed, intensity, or a custom effect slider.",
+			"PropertyInspectorPath": "ui/effect-parameter.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/slider.json",
+				"TriggerDescription": {
+					"Rotate": "Adjust",
+					"Push": "Reset to 50%",
+					"Touch": "Reset to 50%"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/effect-parameter/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Preset",
+			"UUID": "com.legionary-v.wled.preset",
+			"Icon": "imgs/actions/preset/icon",
+			"Tooltip": "Apply a saved preset or playlist, or step through presets.",
+			"PropertyInspectorPath": "ui/preset.html",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/list.json",
+				"TriggerDescription": {
+					"Rotate": "Choose preset",
+					"Push": "Apply preset",
+					"Touch": "Apply preset"
+				}
+			},
+			"States": [{ "Image": "imgs/actions/preset/key", "TitleAlignment": "bottom" }]
+		},
+		{
+			"Name": "Custom JSON",
+			"UUID": "com.legionary-v.wled.custom-json",
+			"Icon": "imgs/actions/custom-json/icon",
+			"Tooltip": "Send any WLED JSON API command.",
+			"PropertyInspectorPath": "ui/custom-json.html",
+			"Controllers": ["Keypad"],
+			"States": [{ "Image": "imgs/actions/custom-json/key", "TitleAlignment": "bottom" }]
+		}
+	]
+}

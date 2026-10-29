@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Color</title>
+		<script src="sdpi-components.js"></script>
+		<script src="wled.js"></script>
+	</head>
+	<body>
+		<wled-device segments></wled-device>
+		<sdpi-item label="Color">
+			<sdpi-color setting="color" default="#ff0000"></sdpi-color>
+		</sdpi-item>
+		<sdpi-item label="Color slot">
+			<sdpi-select setting="slot" default="0">
+				<option value="0">Primary</option>
+				<option value="1">Secondary</option>
+				<option value="2">Tertiary</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Dial adjusts">
+			<sdpi-select setting="dialMode" default="hue">
+				<option value="hue">Hue</option>
+				<option value="saturation">Saturation</option>
+			</sdpi-select>
+		</sdpi-item>
+		<sdpi-item label="Dial step">
+			<sdpi-range setting="step" min="1" max="30" step="1" default="5" showlabels>
+				<span slot="min">1</span>
+				<span slot="max">30</span>
+			</sdpi-range>
+		</sdpi-item>
+		<sdpi-item label="">
+			<p class="wled-hint">Keys apply the color above. Dials change the hue (degrees per tick) or saturation (percent per tick) of the current color; press to switch, tap the touch strip for white.</p>
+		</sdpi-item>
+	</body>
+</html>
