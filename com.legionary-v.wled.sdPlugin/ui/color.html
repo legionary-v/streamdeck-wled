@@ -18,6 +18,9 @@
 				<option value="2">Tertiary</option>
 			</sdpi-select>
 		</sdpi-item>
+		<sdpi-item label="Effect">
+			<sdpi-checkbox setting="keepEffect" label="Keep current effect"></sdpi-checkbox>
+		</sdpi-item>
 		<sdpi-item label="Dial adjusts">
 			<sdpi-select setting="dialMode" default="hue">
 				<option value="hue">Hue</option>
@@ -31,7 +34,7 @@
 			</sdpi-range>
 		</sdpi-item>
 		<sdpi-item label="">
-			<p class="wled-hint">Keys apply the color above. Dials change the hue (degrees per tick) or saturation (percent per tick) of the current color; press to switch, tap the touch strip for white.</p>
+			<p class="wled-hint">Keys apply the color above. Dials change the hue (degrees per tick) or saturation (percent per tick) of the current color; press to switch, tap the touch strip for white. Unless "Keep current effect" is checked, applying a color also switches to the Solid effect and the "Color 1" palette so the color shows.</p>
 		</sdpi-item>
 	</body>
 </html>

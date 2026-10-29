@@ -3,6 +3,7 @@ import { action, type DialDownEvent, type DialRotateEvent, type FeedbackPayload,
 import { colorsMatch, displayColor, hexToRgb, HUE_GRADIENT, hsvToRgb, rgbToHex, rgbToHsv, toLayoutGradient } from "../render/color";
 import { type KeyOptions, renderDialIcon } from "../render/svg";
 import type { DeviceSettings } from "../wled/manager";
+import type { SegmentPatch, StatePatch } from "../wled/types";
 import { type Instance, segmentOf, segmentPatch, WledAction } from "./wled-action";
 import { clamp, num } from "./util";
 
@@ -15,12 +16,18 @@ type ColorSettings = DeviceSettings & {
 	dialMode?: "hue" | "saturation";
 	/** Degrees of hue, or percent of saturation, per dial tick. */
 	step?: number | string;
+	/** When unset, applying a color also switches to the Solid effect and the "Color 1" palette so the color is visible. */
+	keepEffect?: boolean;
 };
 
 const DEFAULT_COLOR = "#ff0000";
 
+/** Effect and palette ids that display the primary color as-is. */
+const SOLID_EFFECT = 0;
+const COLOR_1_PALETTE = 2;
+
 /**
- * Sets a segment color. As a dial: rotate to change hue (or saturation), press to switch between them, tap for white.
+ * Sets a segment color, switching to the Solid effect unless configured otherwise. As a dial: rotate to change hue (or saturation), press to switch between them, tap for white.
  */
 @action({ UUID: "com.legionary-v.wled.color" })
 export class Color extends WledAction<ColorSettings> {
@@ -30,7 +37,7 @@ export class Color extends WledAction<ColorSettings> {
 	override onKeyDown(ev: KeyDownEvent<ColorSettings>): void {
 		const { settings } = ev.payload;
 		const client = this.clientFor(ev.action, settings);
-		client?.send(segmentPatch(settings, { col: slotted(settings, hexToRgb(settings.color ?? DEFAULT_COLOR)) }));
+		client?.send(colorPatch(settings, hexToRgb(settings.color ?? DEFAULT_COLOR)));
 	}
 
 	override onDialRotate(ev: DialRotateEvent<ColorSettings>): void {
@@ -53,7 +60,7 @@ export class Color extends WledAction<ColorSettings> {
 		}
 		hsv.v = Math.max(hsv.v, 0.2);
 
-		client.send(segmentPatch(settings, { col: slotted(settings, hsvToRgb(hsv)) }));
+		client.send(colorPatch(settings, hsvToRgb(hsv)));
 	}
 
 	override onDialDown(ev: DialDownEvent<ColorSettings>): void {
@@ -64,15 +71,16 @@ export class Color extends WledAction<ColorSettings> {
 
 	override onTouchTap(ev: TouchTapEvent<ColorSettings>): void {
 		const { settings } = ev.payload;
-		this.clientFor(ev.action, settings)?.send(segmentPatch(settings, { col: slotted(settings, [255, 255, 255]) }));
+		this.clientFor(ev.action, settings)?.send(colorPatch(settings, [255, 255, 255]));
 	}
 
 	protected override renderKey(instance: Instance<ColorSettings>): KeyOptions {
 		const color = instance.settings.color ?? DEFAULT_COLOR;
-		const current = segmentOf(instance)?.col[slot(instance.settings)];
+		const seg = segmentOf(instance);
+		const showing = instance.settings.keepEffect || seg?.fx === SOLID_EFFECT;
 		return {
 			swatch: color,
-			active: instance.client?.state?.on && colorsMatch(current, hexToRgb(color)),
+			active: instance.client?.state?.on && showing && colorsMatch(seg?.col[slot(instance.settings)], hexToRgb(color)),
 		};
 	}
 
@@ -95,6 +103,16 @@ export class Color extends WledAction<ColorSettings> {
 	#mode(instance: Instance<ColorSettings>): "hue" | "saturation" {
 		return this.#dialModes.get(instance.action.id) ?? instance.settings.dialMode ?? "hue";
 	}
+}
+
+/** Builds the patch that applies a color, switching to Solid / "Color 1" unless the effect should be kept. */
+function colorPatch(settings: ColorSettings, rgb: number[]): StatePatch {
+	const fields: SegmentPatch = { col: slotted(settings, rgb) };
+	if (!settings.keepEffect) {
+		fields.fx = SOLID_EFFECT;
+		fields.pal = COLOR_1_PALETTE;
+	}
+	return segmentPatch(settings, fields);
 }
 
 function slot(settings: ColorSettings): number {

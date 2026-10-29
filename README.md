@@ -14,7 +14,7 @@ Control [WLED](https://kno.wled.ge/) devices from your Stream Deck — locally, 
 | --- | --- | --- |
 | **Power** | Toggle, on, or off. Shows the current state in the light's color. | — |
 | **Brightness** | Set a level, or step brighter/dimmer. | Rotate to adjust · press/tap to toggle power |
-| **Color** | Apply a color to the primary, secondary, or tertiary slot. | Rotate to change hue (or saturation) · press to switch · tap for white |
+| **Color** | Apply a color to the primary, secondary, or tertiary slot. Switches to the Solid effect and "Color 1" palette so the color shows (optional). | Rotate to change hue (or saturation) · press to switch · tap for white |
 | **Effect** | Set an effect, or next/previous/random. | Rotate to scroll effects · press for Solid · tap for random |
 | **Palette** | Set a palette, or next/previous/random. Shows a palette preview. | Rotate to scroll palettes · press for Default · tap for random |
 | **Effect Speed / Intensity** | Set or step speed, intensity, or custom sliders 1–3. | Rotate to adjust · press/tap to reset to 50% |
