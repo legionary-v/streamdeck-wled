@@ -81,7 +81,7 @@ Other scripts:
 ### How it works
 
 - `src/wled/client.ts` keeps one WebSocket per device (`ws://<host>/ws`), receives state pushes, and sends state updates. Rapid dial turns are coalesced (one message per 50 ms) and applied optimistically so dials feel immediate. Effect, palette, and preset lists are fetched over HTTP from the device's JSON API.
-- `src/wled/discovery.ts` finds devices advertising `_wled._tcp` over mDNS.
+- `src/wled/discovery.ts` finds devices over mDNS (`_wled._tcp`, and `_http._tcp` services confirmed via `/json/info`, since newer WLED releases only advertise the latter).
 - `src/actions/` contains one class per action; `wled-action.ts` is the shared base that binds instances to devices, renders keys/dials, and answers property inspector dropdown requests.
 - `src/render/` draws key images and touch strip graphics as SVG.
 - Property inspectors (`com.legionary-v.wled.sdPlugin/ui/`) use a bundled copy of [sdpi-components](https://sdpi-components.dev/) so they work offline.

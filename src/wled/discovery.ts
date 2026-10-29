@@ -11,13 +11,14 @@ export type DiscoveredDevice = {
 };
 
 /**
- * Discovers WLED devices on the local network using mDNS (WLED advertises `_wled._tcp`).
+ * Discovers WLED devices on the local network using mDNS.
  */
 export class Discovery extends EventEmitter<{ change: [] }> {
 	readonly devices = new Map<string, DiscoveredDevice>();
 
 	#bonjour?: Bonjour;
-	#browser?: Browser;
+	#browsers: Browser[] = [];
+	#probing = new Set<string>();
 
 	start(): void {
 		if (this.#bonjour) {
@@ -25,14 +26,18 @@ export class Discovery extends EventEmitter<{ change: [] }> {
 		}
 		try {
 			this.#bonjour = new Bonjour(undefined, (err: unknown) => streamDeck.logger.warn("mDNS error", err));
-			this.#browser = this.#bonjour.find({ type: "wled" });
-			this.#browser.on("up", (service: Service) => this.#onUp(service));
-			this.#browser.on("down", (service: Service) => {
-				const host = addressOf(service);
-				if (host && this.devices.delete(host)) {
-					this.emit("change");
-				}
-			});
+			// Older WLED releases advertise `_wled._tcp`; newer ones only advertise `_http._tcp`, so browse both.
+			for (const type of ["wled", "http"]) {
+				const browser = this.#bonjour.find({ type });
+				browser.on("up", (service: Service) => this.#onUp(service));
+				browser.on("down", (service: Service) => {
+					const host = addressOf(service);
+					if (host && this.devices.delete(host)) {
+						this.emit("change");
+					}
+				});
+				this.#browsers.push(browser);
+			}
 		} catch (err) {
 			streamDeck.logger.warn("Unable to start WLED discovery", err);
 		}
@@ -40,7 +45,7 @@ export class Discovery extends EventEmitter<{ change: [] }> {
 
 	/** Sends a fresh mDNS query, e.g. when the property inspector asks for the device list. */
 	refresh(): void {
-		this.#browser?.update();
+		this.#browsers.forEach((browser) => browser.update());
 	}
 
 	/** First discovered device, used when no device has been configured. */
@@ -48,26 +53,24 @@ export class Discovery extends EventEmitter<{ change: [] }> {
 		return this.devices.values().next().value;
 	}
 
+	/** Adds a service once `/json/info` confirms it's a WLED device, using the name configured on the device. */
 	#onUp(service: Service): void {
 		const host = addressOf(service);
-		if (!host || this.devices.has(host)) {
+		if (!host || this.devices.has(host) || this.#probing.has(host)) {
 			return;
 		}
 
-		this.devices.set(host, { host, name: service.name });
-		this.emit("change");
-
-		// The mDNS name is derived from the MAC address; prefer the name the user gave the device.
+		this.#probing.add(host);
 		fetch(`http://${host}/json/info`, { signal: AbortSignal.timeout(5000) })
-			.then((res) => res.json() as Promise<{ name?: string }>)
+			.then((res) => (res.ok ? (res.json() as Promise<{ name?: string; ver?: string; leds?: unknown }>) : undefined))
 			.then((info) => {
-				const device = this.devices.get(host);
-				if (device && info.name) {
-					device.name = info.name;
+				if (info?.ver && info.leds) {
+					this.devices.set(host, { host, name: info.name || service.name });
 					this.emit("change");
 				}
 			})
-			.catch(() => {});
+			.catch(() => {})
+			.finally(() => this.#probing.delete(host));
 	}
 }
 
