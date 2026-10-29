@@ -47,8 +47,15 @@
 			"Icon": "imgs/actions/power/icon",
 			"Tooltip": "Turn the light on, off, or toggle it.",
 			"PropertyInspectorPath": "ui/power.html",
-			"Controllers": ["Keypad"],
-			"States": [{ "Image": "imgs/actions/power/key", "TitleAlignment": "bottom" }]
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/power/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Brightness",
@@ -56,7 +63,10 @@
 			"Icon": "imgs/actions/brightness/icon",
 			"Tooltip": "Set or step the brightness. On a dial: rotate to adjust, press to toggle power.",
 			"PropertyInspectorPath": "ui/brightness.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/slider.json",
 				"TriggerDescription": {
@@ -65,7 +75,12 @@
 					"Touch": "Toggle power"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/brightness/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/brightness/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Color",
@@ -73,7 +88,10 @@
 			"Icon": "imgs/actions/color/icon",
 			"Tooltip": "Set a color. On a dial: rotate to change hue or saturation, press to switch, tap for white.",
 			"PropertyInspectorPath": "ui/color.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/gradient.json",
 				"TriggerDescription": {
@@ -82,7 +100,12 @@
 					"Touch": "White"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/color/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/color/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Effect",
@@ -90,7 +113,10 @@
 			"Icon": "imgs/actions/effect/icon",
 			"Tooltip": "Set an effect, or cycle through effects. On a dial: rotate to scroll effects.",
 			"PropertyInspectorPath": "ui/effect.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/list.json",
 				"TriggerDescription": {
@@ -99,7 +125,12 @@
 					"Touch": "Random effect"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/effect/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/effect/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Palette",
@@ -107,7 +138,10 @@
 			"Icon": "imgs/actions/palette/icon",
 			"Tooltip": "Set a color palette, or cycle through palettes. On a dial: rotate to scroll palettes.",
 			"PropertyInspectorPath": "ui/palette.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/list.json",
 				"TriggerDescription": {
@@ -116,7 +150,12 @@
 					"Touch": "Random palette"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/palette/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/palette/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Effect Speed / Intensity",
@@ -124,7 +163,10 @@
 			"Icon": "imgs/actions/effect-parameter/icon",
 			"Tooltip": "Adjust the effect speed, intensity, or a custom effect slider.",
 			"PropertyInspectorPath": "ui/effect-parameter.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/slider.json",
 				"TriggerDescription": {
@@ -133,7 +175,12 @@
 					"Touch": "Reset to 50%"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/effect-parameter/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/effect-parameter/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Preset",
@@ -141,7 +188,10 @@
 			"Icon": "imgs/actions/preset/icon",
 			"Tooltip": "Apply a saved preset or playlist, or step through presets.",
 			"PropertyInspectorPath": "ui/preset.html",
-			"Controllers": ["Keypad", "Encoder"],
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
 			"Encoder": {
 				"layout": "layouts/list.json",
 				"TriggerDescription": {
@@ -150,7 +200,12 @@
 					"Touch": "Apply preset"
 				}
 			},
-			"States": [{ "Image": "imgs/actions/preset/key", "TitleAlignment": "bottom" }]
+			"States": [
+				{
+					"Image": "imgs/actions/preset/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		},
 		{
 			"Name": "Custom JSON",
@@ -158,8 +213,15 @@
 			"Icon": "imgs/actions/custom-json/icon",
 			"Tooltip": "Send any WLED JSON API command.",
 			"PropertyInspectorPath": "ui/custom-json.html",
-			"Controllers": ["Keypad"],
-			"States": [{ "Image": "imgs/actions/custom-json/key", "TitleAlignment": "bottom" }]
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/custom-json/key",
+					"TitleAlignment": "bottom"
+				}
+			]
 		}
 	]
 }
