@@ -1,11 +1,11 @@
 {
 	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
-	"Name": "WLED",
-	"Version": "0.1.0.0",
-	"Author": "Michael Egan",
+	"Name": "WLED Live Control",
+	"Version": "0.1.1.0",
+	"Author": "Fifth Legion",
 	"Description": "Control WLED devices on your local network: power, brightness, colors, effects, palettes, effect speed and intensity, and presets — over a local WebSocket, no cloud required.",
 	"URL": "https://github.com/legionary-v/streamdeck-wled",
-	"Category": "WLED",
+	"Category": "WLED Live Control",
 	"CategoryIcon": "imgs/plugin/category-icon",
 	"Icon": "imgs/plugin/marketplace",
 	"CodePath": "bin/plugin.js",
@@ -24,8 +24,7 @@
 		}
 	],
 	"Nodejs": {
-		"Version": "24",
-		"Debug": "enabled"
+		"Version": "24"
 	},
 	"UUID": "com.legionary-v.wled",
 	"Profiles": [

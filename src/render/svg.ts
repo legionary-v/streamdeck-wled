@@ -7,6 +7,14 @@ const ACCENT = "#3b82f6";
 const MUTED = "#8a8a93";
 const FONT = `font-family="Helvetica Neue, Helvetica, Arial, sans-serif"`;
 
+/** The title a user set on a key. Stream Deck draws it over the key image. */
+export type KeyTitle = {
+	alignment: "top" | "middle" | "bottom";
+	/** Font size in points, relative to a 72 px key. */
+	fontSize: number;
+	lines: number;
+};
+
 export type KeyOptions = {
 	icon?: IconName;
 	iconColor?: string;
@@ -22,19 +30,24 @@ export type KeyOptions = {
 	active?: boolean;
 	/** Dims the key and shows "Offline". */
 	offline?: boolean;
+	/** Replaces the sub-label, and keeps the key's content clear of the title. */
+	title?: KeyTitle;
 };
 
 /** Renders a key image as a data URL. */
 export function renderKey(options: KeyOptions): string {
-	const { offline } = options;
+	const { offline, title } = options;
 	const lines = options.label ? wrap(options.label, 11, 2) : [];
-	const sub = offline ? "Offline" : options.sub;
+	const sub = offline ? "Offline" : title ? undefined : options.sub;
 	const parts: string[] = [`<rect width="${KEY_SIZE}" height="${KEY_SIZE}" fill="${BACKGROUND}"/>`];
 
 	// Vertical layout: graphic on top, followed by the optional gradient band, label lines, and sub-label.
 	const textHeight = lines.length * 22 + (sub ? 20 : 0) + (options.gradient ? 22 : 0);
-	const graphicSize = Math.min(64, KEY_SIZE - 28 - textHeight);
-	const top = (KEY_SIZE - (graphicSize + textHeight + (textHeight ? 8 : 0))) / 2;
+	const titleHeight = title ? title.lines * title.fontSize * (KEY_SIZE / 72) * 1.25 + 8 : 0;
+	const reservedTop = title?.alignment === "top" ? titleHeight : 0;
+	const available = KEY_SIZE - reservedTop - (title?.alignment === "bottom" ? titleHeight : 0);
+	const graphicSize = Math.max(24, Math.min(64, available - 28 - textHeight));
+	const top = reservedTop + (available - (graphicSize + textHeight + (textHeight ? 8 : 0))) / 2;
 	let y = top + graphicSize + 8;
 
 	if (options.swatch) {

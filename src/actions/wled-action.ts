@@ -4,15 +4,22 @@ import streamDeck, {
 	type FeedbackPayload,
 	type SendToPluginEvent,
 	SingletonAction,
+	type TitleParametersDidChangeEvent,
 	type WillAppearEvent,
 	type WillDisappearEvent,
 } from "@elgato/streamdeck";
 import type { JsonValue } from "@elgato/utils";
 
-import { type KeyOptions, renderKey } from "../render/svg";
+import { type KeyOptions, type KeyTitle, renderKey } from "../render/svg";
 import type { WledClient } from "../wled/client";
 import { type DeviceSettings, wled } from "../wled/manager";
 import type { NamedItem, SegmentPatch, StatePatch, WledSegment } from "../wled/types";
+
+/** Minimum time between image or feedback updates of one instance; Marketplace guidelines allow 10 per second. */
+const MIN_UPDATE_INTERVAL_MS = 100;
+
+/** Where the property inspector's "Setup help" link goes. */
+const SETUP_HELP_URL = "https://github.com/legionary-v/streamdeck-wled#setup";
 
 /** An item in an sdpi-components `datasource` response. */
 export type DataSourceItem = { label: string; value: string; disabled?: boolean } | { label: string; children: DataSourceItem[] };
@@ -25,6 +32,12 @@ export type Instance<T extends DeviceSettings> = {
 	detach?: () => void;
 	image?: string;
 	feedback?: string;
+	/** The title set by the user, when it's visible. */
+	title?: KeyTitle;
+	/** When the last image or feedback update was sent. */
+	lastUpdate?: number;
+	/** Pending render, delayed to stay within the update limit. */
+	renderTimer?: NodeJS.Timeout;
 };
 
 /**
@@ -58,10 +71,21 @@ export abstract class WledAction<T extends DeviceSettings = DeviceSettings> exte
 	override onWillDisappear(ev: WillDisappearEvent<T>): void {
 		const instance = this.#instances.get(ev.action.id);
 		if (instance) {
+			clearTimeout(instance.renderTimer);
 			instance.detach?.();
 			instance.client?.release();
 			this.#instances.delete(ev.action.id);
 		}
+	}
+
+	override onTitleParametersDidChange(ev: TitleParametersDidChangeEvent<T>): void {
+		const { title, titleParameters } = ev.payload;
+		const instance = this.instance(ev.action, ev.payload.settings);
+		instance.title =
+			titleParameters.showTitle && title.trim()
+				? { alignment: titleParameters.titleAlignment, fontSize: titleParameters.fontSize, lines: title.trim().split("\n").length }
+				: undefined;
+		this.render(instance);
 	}
 
 	override async onDidReceiveSettings(ev: DidReceiveSettingsEvent<T>): Promise<void> {
@@ -75,6 +99,11 @@ export abstract class WledAction<T extends DeviceSettings = DeviceSettings> exte
 	override async onSendToPlugin(ev: SendToPluginEvent<JsonValue, T>): Promise<void> {
 		const event = (ev.payload as { event?: unknown } | null)?.event;
 		if (typeof event !== "string") {
+			return;
+		}
+
+		if (event === "openSetupHelp") {
+			await streamDeck.system.openUrl(SETUP_HELP_URL);
 			return;
 		}
 
@@ -126,15 +155,36 @@ export abstract class WledAction<T extends DeviceSettings = DeviceSettings> exte
 		return undefined;
 	}
 
-	/** Renders an instance's key image or dial feedback from the current device state. */
+	/**
+	 * Renders an instance's key image or dial feedback from the current device state. The first change after a quiet
+	 * period renders immediately; changes within the update limit collapse into one render of the latest state.
+	 */
 	protected render(instance: Instance<T>): void {
+		if (instance.renderTimer) {
+			return;
+		}
+
+		const wait = (instance.lastUpdate ?? 0) + MIN_UPDATE_INTERVAL_MS - Date.now();
+		if (wait > 0) {
+			instance.renderTimer = setTimeout(() => {
+				instance.renderTimer = undefined;
+				this.#draw(instance);
+			}, wait);
+		} else {
+			this.#draw(instance);
+		}
+	}
+
+	#draw(instance: Instance<T>): void {
 		const { action } = instance;
 		if (action.isKey() && this.renderKey) {
 			const options = this.renderKey(instance);
 			options.offline ||= !instance.client?.connected;
+			options.title = instance.title;
 			const image = renderKey(options);
 			if (image !== instance.image) {
 				instance.image = image;
+				instance.lastUpdate = Date.now();
 				action.setImage(image).catch((err) => streamDeck.logger.error("setImage failed", err));
 			}
 		} else if (action.isDial() && this.renderDial) {
@@ -142,6 +192,7 @@ export abstract class WledAction<T extends DeviceSettings = DeviceSettings> exte
 			const serialized = JSON.stringify(feedback);
 			if (serialized !== instance.feedback) {
 				instance.feedback = serialized;
+				instance.lastUpdate = Date.now();
 				action.setFeedback(feedback).catch((err) => streamDeck.logger.error("setFeedback failed", err));
 			}
 		}

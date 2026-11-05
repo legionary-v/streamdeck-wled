@@ -1,4 +1,4 @@
-# WLED for Stream Deck
+# WLED Live Control for Stream Deck
 
 Control [WLED](https://kno.wled.ge/) devices from your Stream Deck — locally, over WLED's WebSocket API. No cloud, no Home Assistant, no extra services.
 

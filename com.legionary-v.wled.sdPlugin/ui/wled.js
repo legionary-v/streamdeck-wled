@@ -24,7 +24,12 @@ customElements.define(
 				</sdpi-item>`
 						: ""
 				}
+				<p class="wled-hint">Device not showing up? <a class="wled-link" href="#">Setup help</a></p>
 				<hr class="wled-divider" />`;
+			this.querySelector(".wled-link").addEventListener("click", (ev) => {
+				ev.preventDefault();
+				SDPIComponents.streamDeckClient.send("sendToPlugin", { event: "openSetupHelp" });
+			});
 		}
 	},
 );
@@ -33,5 +38,6 @@ const style = document.createElement("style");
 style.textContent = `
 	.wled-divider { border: 0; border-top: 1px solid #3d3d3d; margin: 10px 0; }
 	.wled-hint { color: #969696; font-size: 9pt; line-height: 1.4; margin: 4px 0 0 0; }
+	.wled-link { color: #6ea8ff; }
 `;
 document.head.appendChild(style);

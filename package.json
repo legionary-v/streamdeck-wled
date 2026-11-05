@@ -1,6 +1,6 @@
 {
   "name": "streamdeck-wled",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Stream Deck plugin for controlling WLED devices locally over WebSocket",
   "author": "Michael Egan",

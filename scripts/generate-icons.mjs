@@ -58,6 +58,9 @@ const marketplace = (size) =>
 		<rect width="288" height="288" rx="56" fill="url(#g)"/>
 		<g transform="translate(48 48) scale(8)">${icon("wled", "#ffffff")}</g>
 	</svg>`;
-await pair(marketplace, path.join(root, "plugin", "marketplace"), 288);
+await pair(marketplace, path.join(root, "plugin", "marketplace"), 256);
+
+// The Marketplace listing's app icon is uploaded in Maker Console, and isn't part of the plugin.
+await png(marketplace(288), path.resolve(root, "../../marketplace/app-icon.png"), 288);
 
 console.log(`Icons written to ${path.relative(process.cwd(), root)}`);
